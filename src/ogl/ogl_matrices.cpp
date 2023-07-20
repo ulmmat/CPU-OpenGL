@@ -126,22 +126,24 @@ void glRotatef( GLfloat angle, GLfloat x, GLfloat y, GLfloat z ){
     });
 }
 
-void glScaled( GLdouble x, GLdouble y, GLdouble z ){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-    #ifdef DEBUG
-    throw std::runtime_error("Unimplemented function");
-    #endif
+void glScaled(GLdouble x, GLdouble y, GLdouble z ){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.scaleMat<GLdouble>(x, y, z);
+    });
 }
-void glScalef( GLfloat x, GLfloat y, GLfloat z ){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-    #ifdef DEBUG
-    throw std::runtime_error("Unimplemented function");
-    #endif
+void glScalef(GLfloat x, GLfloat y, GLfloat z){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.scaleMat<GLfloat>(x, y, z);
+    });
 }
 
 void glTranslated( GLdouble x, GLdouble y, GLdouble z ){
     cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-
+    #ifdef DEBUG
+    throw std::runtime_error("Unimplemented function");
+    #endif
     withRenderer([&](cgl::Renderer& renderer){
         renderer.translateMatd(x, y, z);
     });
@@ -154,6 +156,20 @@ void glTranslatef( GLfloat x, GLfloat y, GLfloat z ){
     });
 }
 
+void glMultMatrixd(const GLdouble* m){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.multMatd(m);
+    });
+}
+void glMultMatrixf(const GLfloat* m){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.multMatf(m);
+    });
+}
 
 #ifdef __cplusplus
 }

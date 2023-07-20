@@ -116,6 +116,8 @@ void display(void)
       glEnable (GL_DEPTH_TEST);
    }
 
+   glViewport(0, 0, 100, 100);
+
    glPushMatrix ();
       glTranslatef (0.0, 0.0, -8.0);
       glRotatef (30.0, 1.0, 0.0, 0.0);

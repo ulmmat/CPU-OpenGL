@@ -11,6 +11,7 @@ void FrameBuffer::resizeFramebuffer(int width, int height){
 
     color_buffer.resize(width * height, ColorCell{0, 0, 0});
     depth_buffer.resize(width * height, 1.0f);
+    stencil_buffer.resize(width * height, 0.0f);
 
     return;
 }

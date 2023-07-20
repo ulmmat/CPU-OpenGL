@@ -56,11 +56,18 @@ cgl::Map<cgl::String, void*> PROC_MAP = {
     {"wglGetPixelFormatAttribivARB", &wglGetPixelFormatAttribivARB}
 };
 
+HMODULE this_library = nullptr;
 
 PROC wglGetProcAddress(LPCSTR proc_name) {
+    if (!this_library){
+        this_library = LoadLibraryW(L"./opengl32.dll");
+    }
     auto it = PROC_MAP.find(cgl::String(proc_name));
     if (it != PROC_MAP.end()) {
         return reinterpret_cast<PROC>(it->second);
+    }
+    if (this_library){
+        return GetProcAddress(this_library, proc_name);
     }
     return nullptr;
 }

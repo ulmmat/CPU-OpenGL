@@ -15,19 +15,6 @@
 namespace cgl
 {
 
-enum class PrimitiveType : GLenum{
-    GL_POINTS = 0x0000,
-    GL_LINES = 0x0001,
-    GL_LINE_LOOP = 0x0002,
-    GL_LINE_STRIP = 0x0003,
-    GL_TRIANGLES = 0x0004,
-    GL_TRIANGLE_STRIP = 0x0005,
-    GL_TRIANGLE_FAN = 0x0006,
-    GL_QUADS = 0x0007,
-    GL_QUAD_STRIP = 0x0008,
-    GL_POLYGON = 0x0009
-};
-
 enum class PrimitiveVertexCount : GLenum{
     POINT,
     LINE,
@@ -46,6 +33,8 @@ struct BlendOptions{
     GLenum dest_fun = GL_ZERO;
 };
 
+
+
 /**
  * @brief Main class for handling OpenGL requests and storing state
  *
@@ -63,6 +52,8 @@ class Renderer{
          * @brief Resize all framebuffers
          */
         void resizeFramebuffers(int width, int height);
+
+        void setViewport(ViewportInfo vp_info);
 
         /**
          * @brief Set the id of the draw framebuffer
@@ -92,6 +83,8 @@ class Renderer{
         /** Turn backface culling on/off */
         void useBackfaceCull(bool val);
 
+        void setFrontFace(GLenum mode);
+
         /** Get the value of any property from set capability (~glIsEnabled()) */
         bool getCapability(GLenum capability) const;
         /** Set value of a property (~glEnable, ~glDisable) */
@@ -119,15 +112,35 @@ class Renderer{
          */
         void setAlphaFunc(GLenum func, GLclampf val);
 
+        void setColorMask(GLbitfield mask);
+
         void setDepthFunc(GLenum func);
         void setDepthMask(GLboolean flag);
         void setDepthRange(GLfloat near, GLfloat far);
+        void setDepthClear(GLfloat depth);
+
+
+        void setStencilFunc(GLenum func, GLint ref, GLuint mask);
+        void setStencilMask(GLuint mask);
+        void setStencilOp(GLenum stencil_fail, GLenum depth_fail, GLenum both_pass);
+        void setStencilClear(GLint stencil);
+
+        void setScissorBox(GLint x, GLint y, GLsizei width, GLsizei height);
+        void setPolygonOffset(GLfloat factor, GLfloat units);
+
+
+
+        template<typename T>
+        void setFogOption(GLenum param, T val);
+
+        template<typename T>
+        void setFogOptionV(GLenum param, const T* vals);
 
         /**
          * Color used when clearing the framebuffer
          */
         void setClearColor(Vec4 color);
-        void clear();
+        void clear(GLbitfield mask);
 
         /**
          * @brief Set color used for drawing operations
@@ -176,6 +189,12 @@ class Renderer{
         void translateMat(GLfloat x, GLfloat y, GLfloat z);
         void translateMatd(GLdouble x, GLdouble y, GLdouble z);
 
+        void multMatf(const GLfloat* mat_data);
+        void multMatd(const GLdouble* mat_data);
+
+        template<typename T>
+        void scaleMat(T x, T y, T z);
+
         void perspectiveMat(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar);
 
         void frustumMat(GLdouble left, GLdouble right,
@@ -207,18 +226,23 @@ class Renderer{
 
 
         /** Draw Transaction */
-        void beginDraw(PrimitiveType type);
+        void beginDraw(GLenum type);
 
         void addVertex(const Vec3& vec);
         void setVertexNormal(const Vec3& norm);
         void setVertexColor(const Vec4& color);
         void setVertexTexCoords(const Vec2& coords);
+
+        void setVertexArrayElem(GLint i);
         void endDraw();
 
         template<typename TIndices>
-        void drawTrianglesInternal(DrawSettings& set, FrameBuffer& fb, GenericBuffer vertex_data, const TIndices* indices, GLint count, GenericBuffer tex_buf, GenericBuffer color_buf, Texture* tex){
-            m_rasterizer.drawTriangles<TIndices>(set, fb, vertex_data, indices, count, tex_buf, color_buf, getCapability(GL_TEXTURE_2D) ? tex : nullptr);
+        void drawTrianglesInternal(DrawSettings& set, FrameBuffer& fb, GenericBuffer vertex_data, const TIndices* indices, GLint count, GenericBuffer tex_buf, GenericBuffer color_buf){
+            m_rasterizer.drawTriangles<TIndices>(set, fb, vertex_data, indices, count, tex_buf, color_buf);
         }
+
+        template<typename T>
+        void getInternalValue(GLenum pname, T* data);
 
 
         /** Textures */
@@ -234,6 +258,15 @@ class Renderer{
             GLint border, GLenum format, GLenum type,
             const GLvoid* pixels
         );
+
+        void copyFramebufferToTex(
+            GLenum target, GLint level,
+            GLint xoffset, GLint yoffset,
+            GLint x, GLint y,
+            GLsizei width, GLsizei height
+        );
+
+        const Texture* getTexture(GLenum target) const;
 
         void subTexture(GLenum target,GLint level,
             GLint xoffset,GLint yoffset,
@@ -279,6 +312,9 @@ class Renderer{
         Vector<GLuint> m_indices_buffer;
         GLenum m_cull_mode;
         bool m_backface_cull;
+        bool m_cull_ccw = true;
+
+        ViewportInfo m_viewport_info;
 
         /**
          * Rasterizer instance to handle the main drawing
@@ -317,7 +353,7 @@ class Renderer{
         GLenum m_read_framebuffer = GL_FRONT;
 
         /** Transactions */
-        Opt<PrimitiveType> m_begin_transaction = NULLOPT;
+        Opt<GLenum> m_begin_transaction = NULLOPT;
 
         PrimitiveVertexCount m_tr_vertex_cnt;
 
@@ -333,12 +369,39 @@ class Renderer{
         GLenum m_alpha_func = GL_ALWAYS;
         GLclampf m_alpha_val = 0.0f;
 
+        GLbitfield m_color_mask = 0b1111;
+
         // Depth
 
         GLenum m_depth_func = GL_LESS;
         GLboolean m_depth_mask = false;
         GLfloat m_depth_range_near = 0.0f;
         GLfloat m_depth_range_far = 1.0f;
+        GLfloat m_depth_clear = 1.0f;
+
+
+        // Stencil
+
+        GLenum m_stencil_func = GL_ALWAYS;
+        StencCell m_stencil_ref = 0;
+        StencCell m_stencil_mask = STENC_CELL_MASK;
+        StencCell m_clear_stencil = 0;
+
+        GLenum m_stencil_fail_op = GL_KEEP;
+        GLenum m_stencil_depth_fail_op = GL_KEEP;
+        GLenum m_stencil_both_pass_op = GL_KEEP;
+
+        // Scissor
+
+        ScissorBox m_scissor_box;
+
+        // Polygon offset
+
+        PolygonOffset m_polygon_offset;
+
+        // Fog
+
+        FogOptions m_fog_options;
 
         // Textures
 

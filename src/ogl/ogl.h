@@ -17,4 +17,5 @@
 #include "ogl/ogl_matrices.h"
 #include "ogl/ogl_common.h"
 #include "ogl/ogl_buffers.h"
+#include "ogl/ogl_stencil.h"
 #include "ogl/ogl_unimplemented.h"

@@ -44,6 +44,10 @@ void glScalef( GLfloat x, GLfloat y, GLfloat z );
 void glTranslated( GLdouble x, GLdouble y, GLdouble z );
 void glTranslatef( GLfloat x, GLfloat y, GLfloat z );
 
+void glMultMatrixd(const GLdouble* m);
+void glMultMatrixf(const GLfloat* m);
+
+
 #ifdef __cplusplus
 }
 #endif

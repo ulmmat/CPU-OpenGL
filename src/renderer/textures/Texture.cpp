@@ -21,7 +21,13 @@ void Texture::setData(
 
     m_data.resize(width * height);
     m_texture_width = width;
+    m_width_log2 = std::log2(m_texture_width);
+    m_texture_width_minus_1 = m_texture_width - 1;
+
     m_texture_height = height;
+    m_height_log2 = std::log2(m_texture_height);
+    m_texture_height_minus_1 = m_texture_height - 1;
+
     size_t ctr = 0;
     if (format == GL_RGB){
         for (GLsizei i = 0; i < (width * height) * 3; i+= 3){
@@ -86,5 +92,34 @@ void Texture::setSubData(
         }
     }
 }
+void Texture::setFramebufferSubData(
+    GLenum target,GLint level,
+    GLint xoffset,GLint yoffset,
+    GLint x, GLint y,
+    GLsizei width,GLsizei height,
+    const FrameBuffer& fb
+){
+    const ColorCell* fb_color = fb.color_buffer.data();
+    ColorCell* row;
+    for (GLint y_off = yoffset; y_off < static_cast<GLint>(yoffset + height); y_off++){
+        row = getRow(y_off);
+        fb_color = fb.color_buffer.data() + (y_off * fb.width);
+        for (GLint x_off = xoffset; x_off < static_cast<GLint>(xoffset + width); x_off++){
+            row[x_off] = *(fb_color + x_off);
+        }
+    }
+}
+
+GLuint Texture::getWidth() const{
+    return m_texture_width;
+}
+GLuint Texture::getHeight() const{
+    return m_texture_height;
+}
+
+bool Texture::isPowerOfTwo() const{
+    return ( ((m_texture_width & (m_texture_width - 1)) == 0) && ((m_texture_height & (m_texture_height - 1)) == 0) );
+}
+
 }; // namespace cgl
 

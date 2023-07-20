@@ -5,12 +5,11 @@
 #include <limits>
 
 
-void glBegin( GLenum mode ){
+void glBegin(GLenum mode){
     using namespace cgl;
     cgl::coutPrintDebug(__FUNCTION__, "Called");
-    PrimitiveType typed_mode = static_cast<PrimitiveType>(mode);
     withRenderer([&](cgl::Renderer& renderer){
-        renderer.beginDraw(typed_mode);
+        renderer.beginDraw(mode);
     });
 }
 void glEnd( void ){
@@ -445,7 +444,7 @@ void glColor3dv( const GLdouble* v ){
     });
 }
 void glColor3fv( const GLfloat* v ){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
         renderer.setMainColor(
             cgl::Vec4{

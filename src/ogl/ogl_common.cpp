@@ -10,7 +10,7 @@
 void glViewport(GLint x, GLint y, GLsizei width, GLsizei height){
     cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
-        renderer.resizeFramebuffers(width, height);
+        renderer.setViewport(cgl::ViewportInfo{x, y, width, height});
     });
 }
 
@@ -34,11 +34,11 @@ void glDepthRange( GLclampd near_val, GLclampd far_val ){
 }
 
 
-void glClear( GLbitfield mask ){
+void glClear(GLbitfield mask ){
     cgl::coutPrintDebug(__FUNCTION__, "Called");
 
     withRenderer([&](cgl::Renderer& renderer){
-        renderer.clear();
+        renderer.clear(mask);
     });
 }
 void glEnable(GLenum cap ){
@@ -54,6 +54,15 @@ void glDisable(GLenum cap ){
     if (renderer){
         renderer->setCapability(cap, false);
     }
+}
+
+GLboolean glIsEnabled(GLenum cap){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    cgl::Renderer* renderer = getCurrentRenderer();
+    if (renderer){
+        return renderer->getCapability(cap);
+    }
+    return false;
 }
 
 
@@ -78,11 +87,30 @@ void glClearColor( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha )
         renderer.setClearColor(cgl::Vec4{red, green, blue, alpha});
     });
 }
+void glClearDepth(GLdouble depth){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.setDepthClear(depth);
+    });
+}
+void glClearDepthf(GLfloat depth){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.setDepthClear(depth);
+    });
+}
 
 void glCullFace( GLenum mode ){
     cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
         renderer.setBackfaceCullMode(mode);
+    });
+}
+
+void glFrontFace( GLenum mode ){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.setFrontFace(mode);
     });
 }
 
@@ -108,15 +136,22 @@ void glGetFloatv(
 }
 void glGetDoublev(GLenum pname, GLdouble* params){
     cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    #ifdef DEBUG
+    throw std::runtime_error("Unimplemented function");
+    #endif
     return;
 }
 void glGetIntegerv(GLenum pname, GLint* params){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-    return;
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.getInternalValue<GLint>(pname, params);
+    });
 }
 void glGetBooleanv(GLenum pname, GLboolean* params){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-    return;
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.getInternalValue<GLboolean>(pname, params);
+    });
 }
 
 
@@ -125,6 +160,9 @@ void glGetBooleanv(GLenum pname, GLboolean* params){
  */
 GLenum glGetError( void ){
     cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    // #ifdef DEBUG
+    // throw std::runtime_error("Unimplemented function");
+    // #endif
     return 0;
 }
 

@@ -8,6 +8,8 @@
 #include "dataStructures/string.h"
 #include "dataStructures/map.h"
 
+#include <dlfcn.h>
+
 #define GLX_USE_GL		        1
 #define GLX_BUFFER_SIZE		    2
 #define GLX_LEVEL		        3
@@ -95,13 +97,18 @@ const cgl::Map<cgl::String, void*> PROC_ADDRESS_MAP = {
     {"glXQueryDrawable", reinterpret_cast<void*>(&glXQueryDrawable)}
 };
 
+void* this_library = nullptr;
+
 void* glXGetProcAddressARB (const GLubyte* fun){
-    auto it = PROC_ADDRESS_MAP.find(cgl::String(reinterpret_cast<const char*>(fun)));
-    if (it != PROC_ADDRESS_MAP.end()){
-        cgl::coutPrintDebug("Found: ", it->second);
-        return it->second;
+    if (!this_library){
+        this_library = dlopen(nullptr, RTLD_LAZY);
+        if (!this_library){
+            return nullptr;
+        }
     }
-    return nullptr;
+    void* loaded_fun = dlsym(this_library, reinterpret_cast<const char*>(fun));
+    cgl::coutPrintDebug("Found: ", reinterpret_cast<const unsigned char*>(fun), loaded_fun);
+    return loaded_fun;
 }
 
 

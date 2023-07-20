@@ -34,7 +34,24 @@ void glTexSubImage2D( GLenum target, GLint level,
                       GLenum format, GLenum type,
                       const GLvoid* pixels );
 void glTexParameteri( GLenum target, GLenum pname, GLint param );
+void glTexParameterf( GLenum target, GLenum pname, GLfloat param );
 
+void glGetTexParameterfv(GLenum target, GLenum pname, GLfloat *params);
+void glGetTexParameteriv(GLenum target, GLenum pname, GLint *params);
+
+void glCopyTexSubImage2D(
+    GLenum target, GLint level,
+    GLint xoffset, GLint yoffset,
+    GLint x, GLint y,
+    GLsizei width, GLsizei height
+);
+void glGetTexImage(
+    GLenum target,
+    GLint level,
+    GLenum format,
+    GLenum type,
+    GLvoid *pixels
+);
 
 
 #ifdef __cplusplus

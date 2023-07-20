@@ -14,13 +14,16 @@ struct Vertex{
     Vec3 norm = Vec3{0.0f, 0.0f, 1.0f};
     Vec2 tex_coord = Vec2{0.0f};
 
+    float eye_distance = 0;
+
     template<typename T>
     inline Vertex operator * (T i) const{
         return Vertex{
             pos * i,
             color * i,
             norm * i,
-            tex_coord * i
+            tex_coord * i,
+            eye_distance * i
         };
     }
 
@@ -29,7 +32,8 @@ struct Vertex{
             pos + other.pos,
             color + other.color,
             norm + other.norm,
-            tex_coord + other.tex_coord
+            tex_coord + other.tex_coord,
+            eye_distance + other.eye_distance
         };
     }
 };

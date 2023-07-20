@@ -18,6 +18,18 @@ const GLenum GL_DEPTH_BUFFER_BIT = 0x00000100;
 const GLenum GL_STENCIL_BUFFER_BIT = 0x00000400;
 const GLenum GL_COLOR_BUFFER_BIT = 0x00004000;
 
+/* Fog */
+
+const GLenum GL_FOG = 0x0B60;
+const GLenum GL_FOG_MODE = 0x0B65;
+const GLenum GL_FOG_DENSITY = 0x0B62;
+const GLenum GL_FOG_COLOR = 0x0B66;
+const GLenum GL_FOG_INDEX = 0x0B61;
+const GLenum GL_FOG_START = 0x0B63;
+const GLenum GL_FOG_END = 0x0B64;
+const GLenum GL_LINEAR = 0x2601;
+const GLenum GL_EXP = 0x0800;
+const GLenum GL_EXP2 = 0x0801;
 
 /* Stencil */
 const GLenum GL_STENCIL_BITS = 0x0D57;
@@ -35,6 +47,8 @@ const GLenum GL_KEEP = 0x1E00;
 const GLenum GL_REPLACE = 0x1E01;
 const GLenum GL_INCR = 0x1E02;
 const GLenum GL_DECR = 0x1E03;
+const GLenum GL_INCR_WRAP = 0x8507;
+const GLenum GL_DECR_WRAP = 0x8508;
 
 /* Pixel Mode / Transfer */
 const GLenum GL_MAP_COLOR =  0x0D10;
@@ -206,10 +220,14 @@ const GLenum GL_TRIANGLE_FAN = 0x6;
 const GLenum GL_TRIANGLES = 0x4;
 const GLenum GL_QUAD_STRIP = 0x8;
 const GLenum GL_QUADS = 0x7;
+const GLenum GL_POLYGON = 0x9;
 
 /** Framebuffers */
 
-
+const GLenum GL_ALPHA_BITS = 0x0D55;
+const GLenum GL_RED_BITS = 0x0D52;
+const GLenum GL_GREEN_BITS = 0x0D53;
+const GLenum GL_BLUE_BITS = 0x0D54;
 
 
 /** Textures */
@@ -271,13 +289,12 @@ const GLenum GL_MODULATE = 0x2100;
 const GLenum GL_NEAREST = 0x2600;
 const GLenum GL_REPEAT = 0x2901;
 const GLenum GL_CLAMP = 0x2900;
+const GLenum GL_CLAMP_TO_EDGE = 0x812F;
 const GLenum GL_S = 0x2000;
 const GLenum GL_T = 0x2001;
 const GLenum GL_R = 0x2002;
 const GLenum GL_Q = 0x2003;
 const GLenum GL_COLOR_INDEX = 0x1900;
-
-const GLenum GL_LINEAR = 0x2601;
 
 /** String Requests */
 
@@ -377,7 +394,30 @@ const GLenum GL_MODELVIEW = 0x1700;
 const GLenum GL_PROJECTION = 0x1701;
 const GLenum GL_TEXTURE = 0x1702;
 
+const GLenum GL_RED = 0x1903;
+const GLenum GL_GREEN = 0x1904;
+const GLenum GL_BLUE = 0x1905;
+const GLenum GL_ALPHA = 0x1906;
 
+/* Implementation limits */
+const GLenum GL_MAX_LIST_NESTING = 0x0B31;
+const GLenum GL_MAX_EVAL_ORDER = 0x0D30;
+const GLenum GL_MAX_LIGHTS = 0x0D31;
+const GLenum GL_MAX_CLIP_PLANES = 0x0D32;
+const GLenum GL_MAX_TEXTURE_SIZE = 0x0D33;
+const GLenum GL_MAX_PIXEL_MAP_TABLE = 0x0D34;
+const GLenum GL_MAX_ATTRIB_STACK_DEPTH = 0x0D35;
+const GLenum GL_MAX_MODELVIEW_STACK_DEPTH = 0x0D36;
+const GLenum GL_MAX_NAME_STACK_DEPTH = 0x0D37;
+const GLenum GL_MAX_PROJECTION_STACK_DEPTH = 0x0D38;
+const GLenum GL_MAX_TEXTURE_STACK_DEPTH = 0x0D39;
+const GLenum GL_MAX_VIEWPORT_DIMS = 0x0D3A;
+const GLenum GL_MAX_CLIENT_ATTRIB_STACK_DEPTH = 0x0D3B;
+
+
+/* Other */
+
+const GLenum GL_SAMPLES = 0x80A9;
 #else
 
 #define GL_FALSE 0

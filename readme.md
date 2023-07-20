@@ -10,16 +10,22 @@ Currently working (more or less) features are:
 - Blending
 - Alpha testing
 - Depth buffer functions
+- Stencil buffer
 ```
 
 Some missing features include:
 ```
-- Stencil operations
 - Texture mipmapping
 - Non 2D textures
 - Drawing points / lines
 - Lighting
 ```
+
+### Multithreading
+
+A simple multithreading method is supported when filling fragments, using OpenMP. A parallel region is created for each triangle,
+which can cause a severe overhead if too many triangles are drawn. Number of used threads can be changed using the CGL_THREADS environment variable (only a single thread is used by default).
+
 ### Usage
 
 Interfacing is supported via GLX on X11 Linux and WGL on Windows. Implemented functions are the bare minimum to get GLUT and SDL applications working.
@@ -36,4 +42,4 @@ The current version is capable of running the [Yamagi Quake 2](https://github.co
 
 ### Dependencies
 
-[GLM](https://github.com/g-truc/glm) is used for math operations. SGI examples use the GLUT library.
+[GLM](https://github.com/g-truc/glm) is used for math operations. SGI examples use the GLUT library. OpenMP is used for multithreading.

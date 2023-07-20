@@ -13,6 +13,8 @@ void glViewport(GLint x, GLint y, GLsizei width, GLsizei height);
 
 void glClear( GLbitfield mask );
 void glClearColor( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha );
+void glClearDepth(GLdouble depth);
+void glClearDepthf(GLfloat depth);
 
 void glClearStencil( GLint s );
 void glColor4f( GLfloat red, GLfloat green,
@@ -20,8 +22,9 @@ void glColor4f( GLfloat red, GLfloat green,
 
 
 
-void glEnable( GLenum cap );
-void glDisable( GLenum cap );
+void glEnable(GLenum cap);
+void glDisable(GLenum cap);
+GLboolean glIsEnabled(GLenum cap);
 
 void glFinish( void );
 void glFlush( void );
@@ -30,7 +33,8 @@ void glDepthFunc( GLenum func );
 void glDepthMask( GLboolean flag );
 void glDepthRange( GLclampd near_val, GLclampd far_val );
 
-void glCullFace( GLenum mode );
+void glCullFace(GLenum mode);
+void glFrontFace(GLenum mode);
 
 void glGetFloatv(GLenum pname, GLfloat* params);
 void glGetDoublev(GLenum pname, GLdouble* params);

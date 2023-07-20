@@ -108,19 +108,19 @@ void display(void)
 {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glBindTexture(GL_TEXTURE_2D, texName[0]);
-   glBegin(GL_QUADS);
+   glBegin(GL_TRIANGLES);
    glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, -1.0, 0.0);
-   glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, 1.0, 0.0);
+   // glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, 1.0, 0.0);
    glTexCoord2f(1.0, 1.0); glVertex3f(0.0, 1.0, 0.0);
    glTexCoord2f(1.0, 0.0); glVertex3f(0.0, -1.0, 0.0);
    glEnd();
    glBindTexture(GL_TEXTURE_2D, texName[1]);
-   glBegin(GL_QUADS);
-   glTexCoord2f(0.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
-   glTexCoord2f(0.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
-   glTexCoord2f(1.0, 1.0); glVertex3f(2.41421, 1.0, -1.41421);
-   glTexCoord2f(1.0, 0.0); glVertex3f(2.41421, -1.0, -1.41421);
-   glEnd();
+   // glBegin(GL_QUADS);
+   // glTexCoord2f(0.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
+   // glTexCoord2f(0.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
+   // glTexCoord2f(1.0, 1.0); glVertex3f(2.41421, 1.0, -1.41421);
+   // glTexCoord2f(1.0, 0.0); glVertex3f(2.41421, -1.0, -1.41421);
+   // glEnd();
    glFlush();
 }
 

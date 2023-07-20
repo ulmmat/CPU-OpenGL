@@ -10,6 +10,10 @@
 namespace cgl
 {
 
+using DepthCell = float;
+using StencCell = uint8_t;
+
+constexpr StencCell STENC_CELL_MASK = std::numeric_limits<StencCell>::max();
 
 /**
  * Representation of a framebuffer, currently a color and depth buffer
@@ -25,7 +29,8 @@ struct FrameBuffer{
     unsigned height;
 
     Vector<ColorCell> color_buffer;
-    Vector<float> depth_buffer;
+    Vector<DepthCell> depth_buffer;
+    Vector<StencCell> stencil_buffer;
 };
 
 } // namespace cgl

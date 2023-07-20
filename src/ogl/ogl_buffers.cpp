@@ -4,14 +4,14 @@
 #include "renderer/Renderer.h"
 
 void glEnableClientState(GLenum cap){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
         renderer.setClientState(cap, true);
     });
 }
 
 void glDisableClientState(GLenum cap){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
         renderer.setClientState(cap, false);
     });
@@ -100,7 +100,9 @@ void glTexCoordPointer( GLint size, GLenum type, GLsizei stride, const GLvoid* p
 
 void glEdgeFlagPointer( GLsizei stride, const GLvoid* ptr ){
     cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-
+    #ifdef DEBUG
+    throw std::runtime_error("Unimplemented function");
+    #endif
     withRenderer([&](cgl::Renderer& renderer){
         renderer.setGenericBuffer(
             cgl::Renderer::BufferType::EDGE,
@@ -116,11 +118,11 @@ void glGetPointerv( GLenum pname, GLvoid **params ){
     #endif
 }
 
-void glArrayElement( GLint i ){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
-    #ifdef DEBUG
-    throw std::runtime_error("Unimplemented function");
-    #endif
+void glArrayElement(GLint i){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.setVertexArrayElem(i);
+    });
 }
 
 void glDrawArrays( GLenum mode, GLint first, GLsizei count ){

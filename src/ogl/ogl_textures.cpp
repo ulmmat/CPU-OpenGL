@@ -16,12 +16,11 @@ void glBindTexture( GLenum target, GLuint texture ){
     cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
         renderer.bindTexture(texture);
-
     });
 }
 
 void glDeleteTextures( GLsizei n, const GLuint* textures){
-    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
     withRenderer([&](cgl::Renderer& renderer){
         renderer.deleteTextures(n, textures);
     });
@@ -70,7 +69,76 @@ void glTexParameteri( GLenum target, GLenum pname, GLint param ){
     withRenderer([&](cgl::Renderer& renderer){
         renderer.setTextureParameter(target, pname, param);
     });
+}
 
+void glTexParameterf( GLenum target, GLenum pname, GLfloat param ){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.setTextureParameter(target, pname, param);
+    });
+}
+
+void glGetTexParameterfv(GLenum target, GLenum pname, GLfloat *params){
+    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    #ifdef DEBUG
+    throw std::runtime_error("Unimplemented function");
+    #endif
+}
+void glGetTexParameteriv(GLenum target, GLenum pname, GLint *params){
+    cgl::coutPrintDebug(__FUNCTION__, "Unimplemented");
+    #ifdef DEBUG
+    throw std::runtime_error("Unimplemented function");
+    #endif
+}
+
+void glCopyTexSubImage2D(
+    GLenum target, GLint level,
+    GLint xoffset, GLint yoffset,
+    GLint x, GLint y,
+    GLsizei width, GLsizei height
+){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        renderer.copyFramebufferToTex(target, level, xoffset, yoffset, x, y, width, height);
+    });
+}
+
+void glGetTexImage(
+    GLenum target,
+    GLint level,
+    GLenum format,
+    GLenum type,
+    GLvoid *pixels
+){
+    cgl::coutPrintDebug(__FUNCTION__, "Called");
+    withRenderer([&](cgl::Renderer& renderer){
+        switch (type)
+        {
+            case GL_UNSIGNED_BYTE:
+                renderer.getTexture(target)->retrieveData<GLubyte>(level, format, static_cast<GLubyte*>(pixels));
+                break;
+            case GL_BYTE:
+                renderer.getTexture(target)->retrieveData<GLbyte>(level, format, static_cast<GLbyte*>(pixels));
+                break;
+            case GL_UNSIGNED_SHORT:
+                renderer.getTexture(target)->retrieveData<GLushort>(level, format, static_cast<GLushort*>(pixels));
+                break;
+            case GL_SHORT:
+                renderer.getTexture(target)->retrieveData<GLshort>(level, format, static_cast<GLshort*>(pixels));
+                break;
+            case GL_UNSIGNED_INT:
+                renderer.getTexture(target)->retrieveData<GLuint>(level, format, static_cast<GLuint*>(pixels));
+                break;
+            case GL_INT:
+                renderer.getTexture(target)->retrieveData<GLint>(level, format, static_cast<GLint*>(pixels));
+                break;
+            case GL_FLOAT:
+                renderer.getTexture(target)->retrieveData<GLfloat>(level, format, static_cast<GLfloat*>(pixels));
+                break;
+            default:
+                break;
+        }
+    });
 }
 
 

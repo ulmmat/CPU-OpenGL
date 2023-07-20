@@ -1,5 +1,7 @@
 #include "ogl/GLContext.h"
 
+#include "utility/time/Stopwatch.h"
+
 namespace cgl
 {
 
@@ -64,12 +66,12 @@ void GLContext::setHandle(HDC handle){
     width = 0;
     height = 0;
 
-    //width = bitmap_hdr.bmWidth;
-    //height = bitmap_hdr.bmHeight;
+    width = bitmap_hdr.bmWidth;
+    height = bitmap_hdr.bmHeight;
 
-    renderer.resizeFramebuffers(0, 0);
+    renderer.resizeFramebuffers(width, height);
 
-    resizeDIBs(1, 1);
+    resizeDIBs(width, height);
 }
 
 GLContext::FramebufferDIB GLContext::createDIB(const FrameBuffer* framebuffer, int width, int height){
@@ -117,9 +119,17 @@ void GLContext::resizeDIBs(int width, int height) {
 
 
 void GLContext::flushFramebuffer(){
+    static Stopwatch frametime;
     coutPrintDebug("Flushing framebuffer");
     Rasterizer::DrawStats stats = renderer.fetchFrameStats();
-    coutPrint("Drawn tris: ", stats.handled_tris, "Discarded tris: ", stats.discarded_tris, "Fragments: ", stats.handled_fragments, "Drawn Fragments: ", stats.drawn_fragments);
+    coutPrint(
+        "Drawn tris: ", stats.handled_tris,
+        "Discarded tris: ", stats.discarded_tris,
+        "Fragments: ", stats.handled_fragments,
+        "Drawn Fragments: ", stats.drawn_fragments,
+        "FPS: ", 1000000.0f / frametime.micros()
+    );
+    frametime.reset();
     #ifdef GLX
 
     /**
