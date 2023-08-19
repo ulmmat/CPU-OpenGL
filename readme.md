@@ -36,9 +36,7 @@ The library can be injected using [DLL redirection] on Windows, and using the LD
 
 As examples, some basic samples originally distributed by Silicon Graphics are included. These are available [here](https://www.opengl.org/archives/resources/code/samples/redbook/).
 
-The current version is capable of running the [Yamagi Quake 2](https://github.com/yquake2/yquake2) sourceport.
-
-![](https://github.com/ulmmat/CPU-OpenGL-Resources/blob/main/output.gif)
+For a more complex example, Quake 1 can be seen running [here](https://www.youtube.com/watch?v=qeZxJRc__Dk).
 
 ### Dependencies
 
